@@ -57,8 +57,6 @@ void update_lcd() {
   http.begin("http://172.20.10.2:4000/todos/oldest");
   int httpCode = http.GET();
 
-  Serial.println(httpCode);
-
   if (httpCode == HTTP_CODE_OK) {
     String payload = http.getString();
     DynamicJsonDocument doc(1024);
@@ -68,13 +66,8 @@ void update_lcd() {
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("Rien a faire !");
-
-      // digitalWrite(redPin, LOW);
-      // digitalWrite(greenPin, HIGH);
-      // digitalWrite(bluePin, LOW);
-
+      
       change_to("green");
-      Serial.println("here, rien à faire");
     } else {
       const char* title = doc["result"]["title"];
       const char* content = doc["result"]["content"];
@@ -85,12 +78,7 @@ void update_lcd() {
       lcd.setCursor(0, 1);
       lcd.print(content);
 
-      // digitalWrite(redPin, HIGH);
-      // digitalWrite(greenPin, LOW);
-      // digitalWrite(bluePin, LOW);
-
       change_to("red");
-      Serial.println("ici, il faut farie");
     }
   }
 }
@@ -103,19 +91,12 @@ void update_todo() {
 
 void change_to(char* color) {
   if (color == "red") {
-    Serial.println("inside red");
     digitalWrite(redPin, HIGH);
     digitalWrite(greenPin, LOW);
     digitalWrite(bluePin, LOW);
   } else if (color == "green") {
-    Serial.println("inside green");
     digitalWrite(redPin, LOW);
     digitalWrite(bluePin, LOW);
     digitalWrite(greenPin, HIGH);
-  } else {
-    Serial.println("inside else");
-    digitalWrite(redPin, LOW);
-    digitalWrite(greenPin, LOW);
-    digitalWrite(bluePin, LOW);
   }
 }
